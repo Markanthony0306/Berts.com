@@ -1,0 +1,104 @@
+START PROGRAM
+
+DECLARE your_account AS empty list
+DECLARE pets AS list of pet dictionaries (each with id, name, breed, age, adopted status)
+
+FUNCTION registration:
+    DISPLAY welcome ASCII art
+
+    LOOP FOREVER:
+        PROMPT user to "Login or Signup"
+
+        IF user chooses "Signup":
+            PROMPT for user name
+
+            LOOP UNTIL valid email:
+                PROMPT for email
+                IF email contains '@gmail.com':
+                    BREAK
+                ELSE:
+                    DISPLAY error message
+
+            LOOP UNTIL valid password:
+                PROMPT for password
+                IF password has at least one uppercase letter AND one number:
+                    BREAK
+                ELSE:
+                    DISPLAY error message
+
+            PROMPT for age
+            IF age is less than 18:
+                DISPLAY "Cannot accept users under 18"
+                CONTINUE to next loop iteration
+
+            CREATE personal_info dictionary with name, email, password, age
+            APPEND personal_info to your_account
+            DISPLAY "You are now registered"
+
+        ELSE IF user chooses "Login":
+            IF your_account is empty:
+                DISPLAY "No registered users, please sign up first"
+                CONTINUE
+
+            PROMPT for email and password
+
+            FOR each user in your_account:
+                IF email and password match:
+                    DISPLAY welcome message
+                    RETURN from function
+
+            DISPLAY "Wrong credentials, please try again"
+
+        ELSE:
+            DISPLAY "Invalid input. Please type 'Login' or 'Signup'."
+
+FUNCTION display_pets:
+    DISPLAY "Available Pets for Adoption"
+    FOR each pet in pets:
+        DISPLAY pet ID, name, breed, age, and adoption status
+
+FUNCTION adopt_pet:
+    CALL display_pets
+    PROMPT for pet ID to adopt
+
+    FIND pet with matching ID
+
+    IF pet exists AND pet is not adopted:
+        SET pet's adopted status to True
+        DISPLAY adoption receipt with pet info
+    ELSE:
+        DISPLAY "Pet not found or already adopted"
+
+FUNCTION search_pets:
+    PROMPT user to enter breed
+    SEARCH pets for breed matches (case insensitive, not adopted)
+    
+    IF matches found:
+        DISPLAY matched pets' names, breeds, and ages
+    ELSE:
+        DISPLAY "No available pets found for that breed"
+
+FUNCTION main:
+    CALL registration
+
+    LOOP FOREVER:
+        DISPLAY main menu (View Pets, Adopt, Search, Exit)
+
+        PROMPT for user choice
+
+        IF choice is 1:
+            CALL display_pets
+        ELSE IF choice is 2:
+            CALL adopt_pet
+        ELSE IF choice is 3:
+            CALL search_pets
+        ELSE IF choice is 4:
+            DISPLAY goodbye message
+            BREAK
+        ELSE:
+            DISPLAY "Invalid option"
+
+IF program is run as main:
+    CALL main
+
+END PROGRAM
